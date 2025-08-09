@@ -147,8 +147,10 @@ RunSlingshotPipe_Seurat <- function(
     lineage = 1,
     km=4
 ){
+    print('1.pseudotime')
     RunSlingshotSeurat(seu=seu, assay=assay, reduction=reduction, root=root, clus=clus, w=w, h=h, outdir=outdir)
 
+    print('2.matrix')
     library(dplyr)
     d_marker <- d_marker %>% filter(p_val_adj<0.001) %>% filter(avg_log2FC >1) %>% filter(pct.1 >0.5) %>% filter(diff_pct >0.3)
     diff.genes <- unique(d_marker$gene)
@@ -160,10 +162,11 @@ RunSlingshotPipe_Seurat <- function(
     # save pt.matrix
     saveRDS(pt.matrix, paste0(outdir, '/matrix.lineage_', lineage, '.rds'))
 
+    print('3.heatmap')
     ht <- RunComplexHeatmap(pt.matrix, km)
 
-    pdf(paste0(outdir, '/heatmap.pseudotime_', lineage, '.rds'), width = 3, height = 5, useDingbats=FALSE)
-    draw(ht)
+    pdf(paste0(outdir, '/heatmap.pseudotime_', lineage, '.pdf'), width = 3, height = 5, useDingbats=FALSE)
+    ComplexHeatmap::draw(ht)
     dev.off()
 }
 
