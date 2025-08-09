@@ -31,12 +31,9 @@ RunSlingshotSeurat <- function(
     # save slingshot object
     saveRDS(sce_slingshot, paste0(outdir, '/slingshot.rds'))
 
-    # call lineage
-    SlingshotDataSet(sce_slingshot)
-
     # save pesudotime
     pseudotimeED <- slingPseudotime(sce_slingshot, na=FALSE)
-    write.table(pseudotimeED, paste0(outdir, '/slingshot.pseudotime.out'), sep='\t', quote=F, col.names=NA)
+    write.table(pseudotimeED, paste0(outdir, '/slingshot.pseudotime.xls'), sep='\t', quote=F, col.names=NA)
 
 
     # plot
@@ -70,24 +67,27 @@ RunSlingshotSeurat <- function(
 MakePTMatrix <- function(
     slingX = 'sce_slingshot',
     counts = NULL,
+    nknots = 10,
     n = 200,
     lineage = 1
 ){
     pseudotimeED <- slingPseudotime(slingX, na=FALSE)
     cellWeightsED <- slingCurveWeights(slingX)
 
+    # define top genes
     library(tradeSeq)
-    slingX <- fitGAM(counts = as.matrix(counts), pseudotime=pseudotimeED, cellWeights=cellWeightsED, nknots=5, verbose=T)
-    ATres <- associationTest(slingX)
+    X_slingshot <- fitGAM(counts = as.matrix(counts), pseudotime=pseudotimeED, cellWeights=cellWeightsED, nknots=nknots, verbose=T)
+    ATres <- associationTest(X_slingshot)
     topgenes <- rownames(ATres[order(ATres$pvalue), ])[1:n]
 
+    # make matrix
     lineage_model <- paste0('slingPseudotime_', lineage)
     pst.ord <- order(slingX[[lineage_model]], na.last=NA)
     pt.matrix <- assays(slingX)$counts[topgenes, pst.ord]
-    pt.matrix <- t(apply(pt.matrix, 1, function(x){smooth.spline(x,df=3)$y}))
+    pt.matrix <- t(apply(pt.matrix, 1, function(x){smooth.spline(x, df=3)$y}))
     pt.matrix <- t(apply(pt.matrix, 1, function(x){(x-mean(x))/sd(x)}))
 
-    pt.matrix
+    return(pt.matrix)
 }
 
 
@@ -110,7 +110,7 @@ RunComplexHeatmap <- function(mtx='pt.matrix', km=4) {
           col                  = circlize::colorRamp2(seq(from=-2,to=2,length=11),rev(brewer.pal(11, "Spectral"))),
           show_row_names       = TRUE,
           show_column_names    = FALSE,
-          row_names_gp         = gpar(fontsize = 6),
+          row_names_gp         = grid::gpar(fontsize = 6),
           km                   = km,
           row_title_rot        = 0,
           cluster_rows         = TRUE,
@@ -143,6 +143,7 @@ RunSlingshotPipe_Seurat <- function(
     h=3,
     d_marker='',
     n = 200,
+    nknots = 10,
     lineage = 1,
     km=4
 ){
@@ -155,10 +156,15 @@ RunSlingshotPipe_Seurat <- function(
     counts <- as.matrix(seu@assays$SCT@counts[diff.genes,])
 
     sce_slingshot <- readRDS(paste0(outdir, '/slingshot.rds'))
-    pt.matrix <- MakePTMatrix(slingX = sce_slingshot, counts = counts, n = n, lineage = lineage)
+    pt.matrix <- MakePTMatrix(slingX=sce_slingshot, counts=counts, n=n, nknots=nknots, lineage=lineage)
+    # save pt.matrix
+    saveRDS(pt.matrix, paste0(outdir, '/matrix.lineage_', lineage, '.rds'))
 
     ht <- RunComplexHeatmap(pt.matrix, km)
 
+    pdf(paste0(outdir, '/heatmap.pseudotime_', lineage, '.rds'), width = 3, height = 5, useDingbats=FALSE)
+    draw(ht)
+    dev.off()
 }
 
 
