@@ -1,10 +1,4 @@
 
-library(stringr)
-library(monocle)
-library(M3Drop)
-library(igraph)
-library(ggplot2)
-
 
 #' RunMonocle2
 #'
@@ -24,7 +18,7 @@ RunMonocle2 <- function(
     fData <- data.frame(gene_short_name = row.names(data), row.names = row.names(data))
     fd <- new('AnnotatedDataFrame', data = fData)
 
-    HSMM <- newCellDataSet(data,
+    HSMM <- monocle::newCellDataSet(data,
                         phenoData = pd,
                         featureData = fd,
                         expressionFamily = uninormal())
@@ -32,8 +26,8 @@ RunMonocle2 <- function(
     HSMM$cells <- colnames(data)  # same as rownames(HSMM@phenoData)
 
     # add Size_Factor
-    HSMM <- estimateSizeFactors(HSMM) 
-    #HSMM <- estimateDispersions(HSMM)
+    HSMM <- monocle::estimateSizeFactors(HSMM) 
+    #HSMM <- monocle::estimateDispersions(HSMM)
 
 
     # Find DEG genes using 'M3DropFeatureSelection' (it's good enough)
@@ -59,7 +53,7 @@ RunMonocle2 <- function(
 
     ## reduce dimension - do not normalize or include pseudo count. Use monocle scaling
     # max_components=2 can get the best result
-    HSMM <- reduceDimension(HSMM, norm_method="none", 
+    HSMM <- monocle::reduceDimension(HSMM, norm_method="none", 
                             reduction_method="DDRTree",
                             max_components=2,  
                             scaling=TRUE,
@@ -90,9 +84,12 @@ RunMonocle2 <- function(
     d_cds <- data.frame(cells=HSMM2$cells, pseudotime=HSMM2$Pseudotime, cell_type2=HSMM2$cell_type2)
     write.table(d_cds, paste0(outdir, '/monocle2_ordercell.root.pseudotime.xls'), sep='\t', quote=F, row.names=F)
     
-
+    
+    library(igraph)
+    library(ggplot2)
+    
     # save final plot_cell_trajectory
-    p <- plot_cell_trajectory(HSMM2, 
+    p <- monocle::plot_cell_trajectory(HSMM2, 
                          color_by = "cell_type2",  # seurat_clusters
                          theta = -15,
                          show_branch_points = TRUE,
@@ -107,7 +104,7 @@ RunMonocle2 <- function(
 
 
     # save final plot_cell_trajectory with Pseudotime
-    p <- plot_cell_trajectory(HSMM2, color_by = "Pseudotime", cell_link_size = 0.2, cell_size = 0.1) +
+    p <- monocle::plot_cell_trajectory(HSMM2, color_by = "Pseudotime", cell_link_size = 0.2, cell_size = 0.1) +
         scale_color_viridis_c() + 
         theme(legend.key.height=unit(4, 'mm'))
 
