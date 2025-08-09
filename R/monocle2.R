@@ -13,6 +13,8 @@ RunMonocle2 <- function(
     root='RGC',
     outdir='.'
 ){
+    library(monocle)
+    
     data <- as(as.matrix(seu@assays$SCT@data), 'sparseMatrix')
     pd <- new('AnnotatedDataFrame', data = seu@meta.data)
     fData <- data.frame(gene_short_name = row.names(data), row.names = row.names(data))
