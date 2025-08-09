@@ -1,0 +1,20 @@
+Package: pseudotime
+Version: 0.1.0
+Title: Pseudotime
+Description: This package for predict pseudotime from Seurat object.
+Author: Hua Sun [aut,cre]
+Maintainer: Hua Sun <hua.sun229@gmail.com>
+License: MIT + file LICENSE
+Depends:
+    R (>= 4.4.2)
+Imports:
+    Seurat (>= 5.1.0),
+    slingshot,
+    SingleCellExperiment,
+    ComplexHeatmap
+RoxygenNote: 7.3.2
+Encoding: UTF-8
+Collate: 
+    'slingshot.R'
+    
+
