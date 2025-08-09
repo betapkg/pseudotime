@@ -2,5 +2,6 @@
 
 export(MakePTMatrix)
 export(RunComplexHeatmap)
+export(RunMonocle2)
 export(RunSlingshotPipe_Seurat)
 export(RunSlingshotSeurat)

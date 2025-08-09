@@ -15,6 +15,7 @@ RunSlingshotPipe_Seurat(
   h = 3,
   d_marker = "",
   n = 200,
+  nknots = 10,
   lineage = 1,
   km = 4
 )

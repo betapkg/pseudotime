@@ -4,7 +4,13 @@
 \alias{MakePTMatrix}
 \title{MakePTMatrix}
 \usage{
-MakePTMatrix(slingX = "sce_slingshot", counts = NULL, n = 200, lineage = 1)
+MakePTMatrix(
+  slingX = "sce_slingshot",
+  counts = NULL,
+  nknots = 10,
+  n = 200,
+  lineage = 1
+)
 }
 \arguments{
 \item{slingX}{sling object}
