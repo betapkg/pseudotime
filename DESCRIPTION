@@ -16,5 +16,6 @@ RoxygenNote: 7.3.2
 Encoding: UTF-8
 Collate: 
     'slingshot.R'
+    'monocle2.R'
     
 
