@@ -107,7 +107,7 @@ RunComplexHeatmap <- function(mtx='pt.matrix', km=4) {
     htkm <- ComplexHeatmap::Heatmap(
           mtx,
           name                 = "z-score",
-          col                  = circlize::colorRamp2(seq(from=-2,to=2,length=11),rev(brewer.pal(11, "Spectral"))),
+          col                  = circlize::colorRamp2(seq(from=-2,to=2,length=11),rev(RColorBrewer::brewer.pal(11, "Spectral"))),
           show_row_names       = TRUE,
           show_column_names    = FALSE,
           row_names_gp         = grid::gpar(fontsize = 6),
@@ -165,7 +165,7 @@ RunSlingshotPipe_Seurat <- function(
     print('3.heatmap')
     ht <- RunComplexHeatmap(pt.matrix, km)
 
-    pdf(paste0(outdir, '/heatmap.pseudotime_', lineage, '.pdf'), width = 3, height = 5, useDingbats=FALSE)
+    pdf(paste0(outdir, '/heatmap.pseudotime_', lineage, '.pdf'), width = 3.5, height = 4, useDingbats=FALSE)
     ComplexHeatmap::draw(ht)
     dev.off()
 }
