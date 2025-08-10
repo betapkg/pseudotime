@@ -121,8 +121,8 @@ RunComplexHeatmap <- function(mtx='pt.matrix', km=4, outdir='.') {
 
     HM <- ComplexHeatmap::draw(htkm)  #Show the heatmap
 
-    r.dend <- row_dend(HM)  #If needed, extract row dendrogram
-    rcl.list <- row_order(HM)  #Extract clusters (output is a list)
+    r.dend <- ComplexHeatmap::row_dend(HM)  #If needed, extract row dendrogram
+    rcl.list <- ComplexHeatmap::row_order(HM)  #Extract clusters (output is a list)
       
     lapply(rcl.list, function(x) length(x))  #check/confirm size gene clusters
 
