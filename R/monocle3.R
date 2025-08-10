@@ -1,6 +1,6 @@
 
 
-#' RunMonocle3
+#' Monocle3MakeCDS
 #'
 #' @param obj seurat object
 #' @param assay start root
@@ -28,6 +28,14 @@ Monocle3MakeCDS <- function(
 
 
 
+#' RunMonocle3Pipe
+#'
+#' @param seu seurat object
+#' @param root_cells start root
+#' @param outdir out dir
+#'
+#' @export
+#'
 RunMonocle3Pipe <- function(
     seu=NULL,
     root_cells=NULL,

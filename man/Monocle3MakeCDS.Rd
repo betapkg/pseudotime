@@ -2,7 +2,7 @@
 % Please edit documentation in R/monocle3.R
 \name{Monocle3MakeCDS}
 \alias{Monocle3MakeCDS}
-\title{RunMonocle3}
+\title{Monocle3MakeCDS}
 \usage{
 Monocle3MakeCDS(obj = NULL, assay = "SCT", umap = "wnn.umap")
 }
@@ -14,5 +14,5 @@ Monocle3MakeCDS(obj = NULL, assay = "SCT", umap = "wnn.umap")
 \item{umap}{out dir}
 }
 \description{
-RunMonocle3
+Monocle3MakeCDS
 }
