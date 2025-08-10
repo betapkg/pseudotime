@@ -103,7 +103,7 @@ MakePTMatrix <- function(
 #'
 #' @export
 #' 
-RunComplexHeatmap <- function(mtx='pt.matrix', km=4) {
+RunComplexHeatmap <- function(mtx='pt.matrix', km=4, outdir='.') {
     htkm <- ComplexHeatmap::Heatmap(
           mtx,
           name                 = "z-score",
@@ -118,7 +118,30 @@ RunComplexHeatmap <- function(mtx='pt.matrix', km=4) {
           cluster_columns      = FALSE
         )
 
-    htkm
+
+    HM <- draw(htkm)  #Show the heatmap
+
+    r.dend <- row_dend(HM)  #If needed, extract row dendrogram
+    rcl.list <- row_order(HM)  #Extract clusters (output is a list)
+      
+    lapply(rcl.list, function(x) length(x))  #check/confirm size gene clusters
+
+    library(magrittr) # needed to load the pipe function '%%'
+     
+    clu_df <- lapply(names(rcl.list), function(i){
+                out <- data.frame(GeneID = rownames(pt.matrix[rcl.list[[i]],]),
+                         Cluster = paste0("cluster", i),
+                         stringsAsFactors = FALSE)
+                return(out)
+            }) %>% do.call(rbind, .)
+
+    #export
+    write.table(clu_df, file= paste0(outdir, '/gene_clusters.kmean_heatmap.txt'), sep="\t", quote=F, row.names=FALSE)
+
+    # save plot
+    pdf(paste0(outdir, '/heatmap.pseudotime.pdf'), w=3.5, h=4, useDingbats=FALSE)
+    HM
+    dev.off()
 }
 
 
@@ -163,11 +186,7 @@ RunSlingshotPipe_Seurat <- function(
     saveRDS(pt.matrix, paste0(outdir, '/matrix.lineage_', lineage, '.rds'))
 
     print('3.heatmap')
-    ht <- RunComplexHeatmap(pt.matrix, km)
-
-    pdf(paste0(outdir, '/heatmap.pseudotime_', lineage, '.pdf'), width = 3.5, height = 4, useDingbats=FALSE)
-    ComplexHeatmap::draw(ht)
-    dev.off()
+    RunComplexHeatmap(pt.matrix, km, outdir)
 }
 
 

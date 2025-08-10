@@ -4,7 +4,7 @@
 \alias{RunComplexHeatmap}
 \title{RunComplexHeatmap}
 \usage{
-RunComplexHeatmap(mtx = "pt.matrix", km = 4)
+RunComplexHeatmap(mtx = "pt.matrix", km = 4, outdir = ".")
 }
 \arguments{
 \item{mtx}{pt-matrix}

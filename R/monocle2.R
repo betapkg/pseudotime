@@ -28,8 +28,8 @@ RunMonocle2 <- function(
     HSMM$cells <- colnames(data)  # same as rownames(HSMM@phenoData)
 
     # add Size_Factor
-    HSMM <- monocle::estimateSizeFactors(HSMM) 
-    #HSMM <- monocle::estimateDispersions(HSMM)
+    HSMM <- estimateSizeFactors(HSMM) 
+    #HSMM <- estimateDispersions(HSMM)
 
 
     # Find DEG genes using 'M3DropFeatureSelection' (it's good enough)
@@ -62,7 +62,7 @@ RunMonocle2 <- function(
                             verbose=TRUE,
                             pseudo_expr=0)
 
-    HSMM <- monocle::orderCells(HSMM)
+    HSMM <- orderCells(HSMM)
     saveRDS(HSMM, file=paste0(outdir, '/monocle2_ordercell.rds'))
 
 
@@ -80,7 +80,7 @@ RunMonocle2 <- function(
 
     # set root cell
     #start <- 'CycProg-Like'
-    HSMM2 <- monocle::orderCells(HSMM, root_state=GM_state(HSMM, root))
+    HSMM2 <- orderCells(HSMM, root_state=GM_state(HSMM, root))
     saveRDS(HSMM2, file=paste0(outdir, '/monocle2_ordercell.root.rds'))
 
     d_cds <- data.frame(cells=HSMM2$cells, pseudotime=HSMM2$Pseudotime, cell_type2=HSMM2$cell_type2)

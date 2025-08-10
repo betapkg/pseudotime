@@ -17,5 +17,6 @@ Encoding: UTF-8
 Collate: 
     'slingshot.R'
     'monocle2.R'
+    'monocle3.R'
     
 
