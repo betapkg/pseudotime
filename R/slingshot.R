@@ -22,18 +22,18 @@ RunSlingshotSeurat <- function(
     dir.create(outdir)
 
     # seurat to sce
-    sce <- as.SingleCellExperiment(seu, assay='SCT')
+    sce <- as.SingleCellExperiment(seu, assay=assay)
     
     # UMAP or RNA.UMAP
     # set root cluster 
     sce_slingshot <- slingshot(sce, reducedDim=reduction, start.clus=root, clusterLabels=sce[[clus]])
 
     # save slingshot object
-    saveRDS(sce_slingshot, paste0(outdir, '/slingshot.rds'))
+    saveRDS(sce_slingshot, paste0(outdir, '/1.slingshot.rds'))
 
     # save pesudotime
     pseudotimeED <- slingPseudotime(sce_slingshot, na=FALSE)
-    write.table(pseudotimeED, paste0(outdir, '/slingshot.pseudotime.xls'), sep='\t', quote=F, col.names=NA)
+    write.table(pseudotimeED, paste0(outdir, '/2.slingshot.pseudotime.xls'), sep='\t', quote=F, col.names=NA)
 
 
     # plot
@@ -136,7 +136,7 @@ RunComplexHeatmap <- function(pt_mtx='pt.matrix', km=4, outdir='.') {
             }) %>% do.call(rbind, .)
 
     #export
-    write.table(clu_df, file= paste0(outdir, '/gene_clusters.kmean_heatmap.txt'), sep="\t", quote=F, row.names=FALSE)
+    write.table(clu_df, file= paste0(outdir, '/3.gene_clusters.kmean_heatmap.txt'), sep="\t", quote=F, row.names=FALSE)
 
     # save plot
     pdf(paste0(outdir, '/heatmap.pseudotime.pdf'), w=3.5, h=4, useDingbats=FALSE)
@@ -165,6 +165,9 @@ RunSlingshotPipe_Seurat <- function(
     w=4.5,
     h=3,
     d_marker='',
+    avg_log2FC=1,
+    pct_1=0.5,
+    diff_pct=0.3,
     n = 200,
     nknots = 10,
     lineage = 1,
@@ -173,17 +176,18 @@ RunSlingshotPipe_Seurat <- function(
     print('1.pseudotime')
     RunSlingshotSeurat(seu=seu, assay=assay, reduction=reduction, root=root, clus=clus, w=w, h=h, outdir=outdir)
 
-    print('2.matrix')
+    print('2-1.diff markers')
     library(dplyr)
-    d_marker <- d_marker %>% filter(p_val_adj<0.001) %>% filter(avg_log2FC >1) %>% filter(pct.1 >0.5) %>% filter(diff_pct >0.3)
+    d_marker <- d_marker %>% filter(p_val_adj<0.001) %>% filter(avg_log2FC > avg_log2FC) %>% filter(pct.1 > pct_1) %>% filter(diff_pct > diff_pct)
     diff.genes <- unique(d_marker$gene)
 
     counts <- as.matrix(seu@assays$SCT@counts[diff.genes,])
 
-    sce_slingshot <- readRDS(paste0(outdir, '/slingshot.rds'))
+    print('2-2.matrix')
+    sce_slingshot <- readRDS(paste0(outdir, '/1.slingshot.rds'))
     pt.matrix <- MakePTMatrix(slingX=sce_slingshot, counts=counts, n=n, nknots=nknots, lineage=lineage)
     # save pt.matrix
-    saveRDS(pt.matrix, paste0(outdir, '/matrix.lineage_', lineage, '.rds'))
+    saveRDS(pt.matrix, paste0(outdir, '/2.matrix.lineage_', lineage, '.rds'))
 
     print('3.heatmap')
     RunComplexHeatmap(pt.matrix, km, outdir)

@@ -49,7 +49,7 @@ RunMonocle3Pipe <- function(
 
     # 1.make cds
     cds <- Monocle3MakeCDS( obj=seu, assay='SCT', umap=umap)
-    saveRDS(cds, paste0(outdir, '/monocle3_cds.rds'))
+    saveRDS(cds, paste0(outdir, '/1.monocle3_cds.rds'))
 
     # 2.order cells
     #meta_filtered <- meta %>% filter(orig.ident=='E12' & cell_type2=='RGC')
@@ -59,7 +59,7 @@ RunMonocle3Pipe <- function(
     # 3. export pseudotime
     pseudotime <- cds@principal_graph_aux@listData[["UMAP"]][["pseudotime"]]
     d_pseudotime <- data.frame(pseudotime)
-    write.table(d_pseudotime, paste0(outdir, '/pseudotime.out'), sep='\t', quote=F, col.names=NA)
+    write.table(d_pseudotime, paste0(outdir, '/2.pseudotime.out'), sep='\t', quote=F, col.names=NA)
 
     # 4. plot cells
     p <- plot_cells(
@@ -69,7 +69,7 @@ RunMonocle3Pipe <- function(
       label_leaves=FALSE,
       label_branch_points=FALSE
     )
-    ggsave(paste0(outdir, '/pseudotime.umap.pdf'), w=6.5, h=5)
+    ggsave(paste0(outdir, '/2a.pseudotime.umap.pdf'), w=6.5, h=5)
     
 
     # 5. make matrix for heatmap
@@ -86,7 +86,7 @@ RunMonocle3Pipe <- function(
     pt.matrix <- t(apply(pt.matrix,1,function(x){(x-mean(x))/sd(x)}))
     rownames(pt.matrix) <- genes
 
-    write.table(pt.matrix, paste0(outdir,'/pt_matrix.tsv'), sep='\t', quote=F, row.names=F)
+    write.table(pt.matrix, paste0(outdir,'/3.pt_matrix.tsv'), sep='\t', quote=F, row.names=F)
 
 }
 

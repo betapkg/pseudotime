@@ -4,7 +4,7 @@
 \alias{RunMonocle3Pipe}
 \title{RunMonocle3Pipe}
 \usage{
-RunMonocle3Pipe(seu = NULL, root_cells = NULL, outdir = ".")
+RunMonocle3Pipe(seu = NULL, root_cells = NULL, umap = "umap", outdir = ".")
 }
 \arguments{
 \item{seu}{seurat object}
