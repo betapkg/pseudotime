@@ -39,6 +39,7 @@ Monocle3MakeCDS <- function(
 RunMonocle3Pipe <- function(
     seu=NULL,
     root_cells=NULL,
+    umap='umap',
     outdir='.'
 ){
     library(monocle3)
@@ -47,7 +48,7 @@ RunMonocle3Pipe <- function(
     dir.create(outdir)
 
     # 1.make cds
-    cds <- Monocle3MakeCDS( obj=seu, assay='SCT', umap='wnn.umap')
+    cds <- Monocle3MakeCDS( obj=seu, assay='SCT', umap=umap)
     saveRDS(cds, paste0(outdir, '/monocle3_cds.rds'))
 
     # 2.order cells
