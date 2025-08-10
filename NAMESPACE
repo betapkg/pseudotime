@@ -2,6 +2,7 @@
 
 export(MakePTMatrix)
 export(Monocle3MakeCDS)
+export(PlotSlingshot)
 export(RunComplexHeatmap)
 export(RunMonocle2)
 export(RunMonocle3Pipe)

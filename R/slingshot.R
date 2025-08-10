@@ -4,19 +4,19 @@
 #' @param seu seurat
 #' @param assay assay
 #' @param reduction reducedDim
-#' @param root root name
-#' @param clus cluster labels
+#' @param start_root root name
+#' @param ident ident labels
 #'
 #' @export
 #'
 RunSlingshotSeurat <- function(
     seu = NULL,
     assay = 'SCT',
-    reduction = 'RNA.UMAP',
-    root = '5',
-    clus = 'seurat_clusters',
-    w=4.5,
-    h=3,
+    ident = 'seurat_clusters',
+    reduction = 'PCA',
+    start_root = NULL,
+    allow_breaks = TRUE,
+    save = FALSE,
     outdir = 'out_slingshot'
 ){
     dir.create(outdir)
@@ -26,28 +26,63 @@ RunSlingshotSeurat <- function(
     
     # UMAP or RNA.UMAP
     # set root cluster 
-    sce_slingshot <- slingshot(sce, reducedDim=reduction, start.clus=root, clusterLabels=sce[[clus]])
+    sce_slingshot <- slingshot(sce, reducedDim=reduction, start.clus=start_root, clusterLabels=sce[[ident]], allow.breaks = allow_breaks)
 
-    # save slingshot object
-    saveRDS(sce_slingshot, paste0(outdir, '/1.slingshot.rds'))
-
-    # save pesudotime
-    pseudotimeED <- slingPseudotime(sce_slingshot, na=FALSE)
-    write.table(pseudotimeED, paste0(outdir, '/2.slingshot.pseudotime.xls'), sep='\t', quote=F, col.names=NA)
+    summary_lineages <- SlingshotDataSet(sce_slingshot)
+    print(summary_lineages)
 
 
+    if (save){
+        # save summary lineage
+        d_lineages <- as.data.frame(summary_lineages@lineages)
+        write.table(d_lineages, file=paste0(outdir, '/1.slingshot.summary_lineages.xls'), sep='\t', quote=F, col.names=NA)
+
+        # save slingshot object
+        saveRDS(sce_slingshot, paste0(outdir, '/1.slingshot.rds'))
+
+        # save pesudotime
+        pseudotimeED <- slingPseudotime(sce_slingshot, na=FALSE)
+        write.table(pseudotimeED, paste0(outdir, '/2.slingshot.pseudotime.xls'), sep='\t', quote=F, col.names=NA)
+    } else{
+        return(sce_slingshot)
+    }
+    
+}
+
+
+
+
+
+
+#' Plot-Slingshot
+#'
+#' @param sce_slingshot sce_slingshot
+#' @param lineage lineage n
+#'
+#' @export
+#'
+PlotSlingshot <- function(
+    sce_slingshot = NULL,
+    lineage = 1,
+    w=4.5,
+    h=3,
+    outdir = 'out_slingshot'
+){
     # plot
     # set color
     library(RColorBrewer)
     colors <- colorRampPalette(rev(brewer.pal(11, 'Spectral'))[-6])(100)
     # library(grDevices)
-    plotcol <- colors[cut(sce_slingshot$slingPseudotime_1, breaks=100)]
+    lineage_name <- paste0('slingPseudotime_', lineage)
+    plotcol <- colors[cut(sce_slingshot[[lineage_name]], breaks=100)]
 
-    pdf(paste0(outdir, '/sligshort.pseudotime_1.pdf'), width=w, height=h, useDingbats=FALSE)
-    plot(reducedDims(sce_slingshot)[[reduction]], col=plotcol, pch=16, asp=0.5)
+    pdf(paste0(outdir, '/', lineage_name, '.pdf'), width=w, height=h, useDingbats=FALSE)
+    #plot(reducedDims(sce_slingshot)[[reduction]], col=plotcol, pch=16, asp=0.5)
+    plot(reducedDims(sce_slingshot, reduction), col=plotcol, pch=16, asp=0.5)
     lines(SlingshotDataSet(sce_slingshot), lwd=1, col='black')
     dev.off()
 }
+
 
 
 
@@ -158,9 +193,10 @@ RunComplexHeatmap <- function(pt_mtx='pt.matrix', km=4, outdir='.') {
 RunSlingshotPipe_Seurat <- function(
     seu = NULL,
     assay = 'SCT',
-    reduction = 'RNA.UMAP',
-    root = '5',
-    clus = 'seurat_clusters',
+    reduction = 'PCA',
+    start_root = NULL,
+    allow_breaks=TRUE,
+    ident = 'seurat_clusters',
     outdir = 'out_slingshot',
     w=4.5,
     h=3,
@@ -174,7 +210,9 @@ RunSlingshotPipe_Seurat <- function(
     km=4
 ){
     print('1.pseudotime')
-    RunSlingshotSeurat(seu=seu, assay=assay, reduction=reduction, root=root, clus=clus, w=w, h=h, outdir=outdir)
+    RunSlingshotSeurat(seu=seu, assay=assay, reduction=reduction, start_root=root, ident=ident, allow_breaks=allow_breaks, outdir=outdir, save=TRUE)  
+    sce_slingshot <- readRDS(paste0(outdir, '/1.slingshot.rds'))
+    PlotSlingshot(sce_slingshot=sce_slingshot, lineage=1, w=4.5, h=3, outdir=outdir)
 
     print('2-1.diff markers')
     library(dplyr)
@@ -184,7 +222,6 @@ RunSlingshotPipe_Seurat <- function(
     counts <- as.matrix(seu@assays$SCT@counts[diff.genes,])
 
     print('2-2.matrix')
-    sce_slingshot <- readRDS(paste0(outdir, '/1.slingshot.rds'))
     pt.matrix <- MakePTMatrix(slingX=sce_slingshot, counts=counts, n=n, nknots=nknots, lineage=lineage)
     # save pt.matrix
     saveRDS(pt.matrix, paste0(outdir, '/2.matrix.lineage_', lineage, '.rds'))
