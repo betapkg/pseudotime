@@ -96,7 +96,7 @@ MakePTMatrix <- function(
 
 #' RunComplexHeatmap
 #'
-#' @param mtx pt-matrix
+#' @param pt_mtx pt-matrix
 #' @param km km
 #'
 #' @return ht
@@ -105,7 +105,7 @@ MakePTMatrix <- function(
 #' 
 RunComplexHeatmap <- function(pt_mtx='pt.matrix', km=4, outdir='.') {
     htkm <- ComplexHeatmap::Heatmap(
-          mtx,
+          pt_mtx,
           name                 = "z-score",
           col                  = circlize::colorRamp2(seq(from=-2,to=2,length=11),rev(RColorBrewer::brewer.pal(11, "Spectral"))),
           show_row_names       = TRUE,
