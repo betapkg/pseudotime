@@ -103,7 +103,7 @@ MakePTMatrix <- function(
 #'
 #' @export
 #' 
-RunComplexHeatmap <- function(mtx='pt.matrix', km=4, outdir='.') {
+RunComplexHeatmap <- function(pt_mtx='pt.matrix', km=4, outdir='.') {
     htkm <- ComplexHeatmap::Heatmap(
           mtx,
           name                 = "z-score",
@@ -129,7 +129,7 @@ RunComplexHeatmap <- function(mtx='pt.matrix', km=4, outdir='.') {
     library(magrittr) # needed to load the pipe function '%%'
      
     clu_df <- lapply(names(rcl.list), function(i){
-                out <- data.frame(GeneID = rownames(pt.matrix[rcl.list[[i]],]),
+                out <- data.frame(GeneID = rownames(pt_mtx[rcl.list[[i]],]),
                          Cluster = paste0("cluster", i),
                          stringsAsFactors = FALSE)
                 return(out)
