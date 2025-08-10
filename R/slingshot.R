@@ -29,7 +29,7 @@ RunSlingshotSeurat <- function(
     sce_slingshot <- slingshot(sce, reducedDim=reduction, start.clus=start_root, clusterLabels=sce[[ident]], allow.breaks = allow_breaks)
 
     summary_lineages <- SlingshotDataSet(sce_slingshot)
-    print(summary_lineages)
+    print(summary_lineages@lineages)
 
 
     if (save){
