@@ -1,22 +1,11 @@
 Package: pseudotime
-Version: 0.1.0
-Title: Pseudotime
-Description: This package for predict pseudotime from Seurat object.
-Author: Hua Sun [aut,cre]
-Maintainer: Hua Sun <hua.sun229@gmail.com>
-License: MIT + file LICENSE
-Depends:
-    R (>= 4.4.2)
-Imports:
-    Seurat (>= 5.1.0),
-    slingshot,
-    SingleCellExperiment,
-    ComplexHeatmap
-RoxygenNote: 7.3.2
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
+Description: What the package does (one paragraph).
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
 Encoding: UTF-8
-Collate: 
-    'slingshot.R'
-    'monocle2.R'
-    'monocle3.R'
-    
-
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2

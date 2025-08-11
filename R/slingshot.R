@@ -201,9 +201,9 @@ RunSlingshotPipe_Seurat <- function(
     w=4.5,
     h=3,
     d_marker='',
-    avg_log2FC=1,
-    pct_1=0.5,
-    diff_pct=0.3,
+    avg_log2FC=0.585,
+    pct_1=0.3,
+    diff_pct=0.2,
     n = 200,
     nknots = 10,
     lineage = 1,
@@ -218,6 +218,7 @@ RunSlingshotPipe_Seurat <- function(
     library(dplyr)
     d_marker <- d_marker %>% filter(p_val_adj<0.001) %>% filter(avg_log2FC > avg_log2FC) %>% filter(pct.1 > pct_1) %>% filter(diff_pct > diff_pct)
     diff.genes <- unique(d_marker$gene)
+
 
     counts <- as.matrix(seu@assays$SCT@counts[diff.genes,])
 
