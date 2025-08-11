@@ -82,8 +82,7 @@ PlotSlingshot <- function(
     plotcol <- colors[cut(sce_slingshot[[lineage_name]], breaks=100)]
 
     pdf(paste0(outdir, '/', lineage_name, '.pdf'), width=w, height=h, useDingbats=FALSE)
-    #plot(reducedDims(sce_slingshot)[[reduction]], col=plotcol, pch=16, asp=0.5)
-    plot(reducedDims(sce_slingshot, reduction), col=plotcol, pch=16, asp=0.5)
+    plot(reducedDims(sce_slingshot)[[reduction]], col=plotcol, pch=16, asp=0.5)
     lines(SlingshotDataSet(sce_slingshot), lwd=1, col='black')
     dev.off()
 }
