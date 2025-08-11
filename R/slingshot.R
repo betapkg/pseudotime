@@ -73,7 +73,8 @@ PlotSlingshot <- function(
     w=4.5,
     h=3,
     outdir = 'out_slingshot'
-){
+){  
+    library(RColorBrewer)
     # plot
     colors <- colorRampPalette(rev(brewer.pal(11, 'Spectral'))[-6])(100)
     # library(grDevices)
