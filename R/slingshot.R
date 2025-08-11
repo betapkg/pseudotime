@@ -46,7 +46,7 @@ RunSlingshotSeurat <- function(
         write.table(pseudotimeED, paste0(outdir, '/2.slingshot.pseudotime.xls'), sep='\t', quote=F, col.names=NA)
 
         # plot
-        #PlotSlingshot(sce_slingshot=sce_slingshot, reduction=reduction, lineage=1, w=4.5, h=3, outdir=outdir)
+        PlotSlingshot(sce_slingshot=sce_slingshot, reduction=reduction, lineage=1, w=4.5, h=3, outdir=outdir)
     } else{
         return(sce_slingshot)
     }
