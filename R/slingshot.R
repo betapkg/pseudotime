@@ -46,7 +46,7 @@ RunSlingshotSeurat <- function(
         write.table(pseudotimeED, paste0(outdir, '/2.slingshot.pseudotime.xls'), sep='\t', quote=F, col.names=NA)
 
         # plot
-        PlotSlingshot(sce_slingshot=sce_slingshot, lineage=1, w=4.5, h=3, outdir=outdir)
+        PlotSlingshot(sce_slingshot=sce_slingshot, reduction=reduction, lineage=1, w=4.5, h=3, outdir=outdir)
     } else{
         return(sce_slingshot)
     }
@@ -63,18 +63,18 @@ RunSlingshotSeurat <- function(
 #' @param sce_slingshot sce_slingshot
 #' @param lineage lineage n
 #'
+#' @import RColorBrewer 
 #' @export
 #'
 PlotSlingshot <- function(
     sce_slingshot = NULL,
+    reduction = NULL,
     lineage = 1,
     w=4.5,
     h=3,
     outdir = 'out_slingshot'
 ){
     # plot
-    # set color
-    library(RColorBrewer)
     colors <- colorRampPalette(rev(brewer.pal(11, 'Spectral'))[-6])(100)
     # library(grDevices)
     lineage_name <- paste0('slingPseudotime_', lineage)
@@ -216,7 +216,6 @@ RunSlingshotPipe_Seurat <- function(
     print('1.pseudotime')
     RunSlingshotSeurat(seu=seu, assay=assay, reduction=reduction, start_root=root, ident=ident, allow_breaks=allow_breaks, outdir=outdir, save_out=TRUE)  
     sce_slingshot <- readRDS(paste0(outdir, '/1.slingshot.rds'))
-    PlotSlingshot(sce_slingshot=sce_slingshot, lineage=1, w=4.5, h=3, outdir=outdir)
 
     print('2-1.diff markers')
     library(dplyr)
