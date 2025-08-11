@@ -26,7 +26,7 @@ RunSlingshotSeurat <- function(
     
     # UMAP or RNA.UMAP
     # set root cluster 
-    sce_slingshot <- slingshot(sce, reducedDim=reduction, start.clus=start_root, clusterLabels=sce[[ident]], allow.breaks = allow_breaks)
+    sce_slingshot <- slingshot(sce, reducedDim=reduction, start.clus=start_root, clusterLabels=ident, allow.breaks = allow_breaks)
 
     summary_lineages <- SlingshotDataSet(sce_slingshot)
     print(summary_lineages@lineages)
