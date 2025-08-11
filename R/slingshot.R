@@ -16,7 +16,7 @@ RunSlingshotSeurat <- function(
     reduction = 'PCA',
     start_root = NULL,
     allow_breaks = TRUE,
-    save = FALSE,
+    save_out = FALSE,
     outdir = 'out_slingshot'
 ){
     dir.create(outdir)
@@ -32,7 +32,7 @@ RunSlingshotSeurat <- function(
     print(summary_lineages@lineages)
 
 
-    if (save){
+    if (save_out){
         # save summary lineage
         d_lineages <- as.data.frame(summary_lineages@lineages)
         write.table(d_lineages, file=paste0(outdir, '/1.slingshot.summary_lineages.xls'), sep='\t', quote=F, col.names=NA)
@@ -210,7 +210,7 @@ RunSlingshotPipe_Seurat <- function(
     km=4
 ){
     print('1.pseudotime')
-    RunSlingshotSeurat(seu=seu, assay=assay, reduction=reduction, start_root=root, ident=ident, allow_breaks=allow_breaks, outdir=outdir, save=TRUE)  
+    RunSlingshotSeurat(seu=seu, assay=assay, reduction=reduction, start_root=root, ident=ident, allow_breaks=allow_breaks, outdir=outdir, save_out=TRUE)  
     sce_slingshot <- readRDS(paste0(outdir, '/1.slingshot.rds'))
     PlotSlingshot(sce_slingshot=sce_slingshot, lineage=1, w=4.5, h=3, outdir=outdir)
 
