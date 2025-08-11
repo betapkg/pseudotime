@@ -35,7 +35,10 @@ RunSlingshotSeurat <- function(
     if (save_out){
         print('save ...')
         # save summary lineage
-        d_lineages <- as.data.frame(summary_lineages@lineages)
+        library(tidyverse)
+        s_list <- summary_lineages@lineages
+        #d_lineages <- as.data.frame(summary_lineages@lineages)
+        d_lineages <- map(s_list, ~ .x %>% `length<-`(max(lengths(s_list)))) %>% bind_rows() %>% as.data.frame()
         write.table(d_lineages, file=paste0(outdir, '/1.slingshot.summary_lineages.xls'), sep='\t', quote=F, col.names=NA)
 
         # save slingshot object
