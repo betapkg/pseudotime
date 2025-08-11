@@ -33,6 +33,7 @@ RunSlingshotSeurat <- function(
 
 
     if (save_out){
+        print('save ...')
         # save summary lineage
         d_lineages <- as.data.frame(summary_lineages@lineages)
         write.table(d_lineages, file=paste0(outdir, '/1.slingshot.summary_lineages.xls'), sep='\t', quote=F, col.names=NA)
