@@ -35,6 +35,7 @@ RunSlingshotSeurat <- function(
     if (save_out){
         print('save ...')
         # save summary lineage
+        library(conflicted)
         library(tidyverse)
         s_list <- summary_lineages@lineages
         #d_lineages <- as.data.frame(summary_lineages@lineages)
