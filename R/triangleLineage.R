@@ -335,8 +335,8 @@ RunTriangleAnalysis <- function(
   
   # Save gene lists
   writeLines(shared_genes, paste0(out_dir, '/shared.gene'))
-  writeLines(gene_armL, paste0(out_dir, '/', armL, '.gene'))
-  writeLines(gene_armR, paste0(out_dir, '/', armR, '.gene'))
+  writeLines(gene_armL, paste0(out_dir, '/armL.gene'))
+  writeLines(gene_armR, paste0(out_dir, '/armR.gene'))
   
 
   # Merge all scores
