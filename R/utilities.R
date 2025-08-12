@@ -65,9 +65,9 @@ FindRootCell <- function(
     d2 <- d[order(d[[gene]], decreasing=T),]
 
     if (length(sample) > 0){
-        rc <- head(rownames(d2[d2$sample=='E12' & d2$cell_type2=='RGC',]), n=1)
+        rc <- head(rownames(d2[d2$sample==sample & d2$cell_type2==celltype,]), n=1)
         } else {
-            rc <- head(rownames(d2[d2$cell_type2=='RGC',]), n=1)
+            rc <- head(rownames(d2[d2$cell_type2==celltype,]), n=1)
         }
 
     return(rc)
