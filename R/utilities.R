@@ -1,5 +1,6 @@
 
 
+
 #' RunM3DropFeatureSelection
 #'
 #' @param seu seurat
@@ -37,6 +38,44 @@ RunM3DropFeatureSelection <- function(
     writeLines(diff_ordering_genes, paste0(outdir,'/out_m3drop.DEG2k.gene'))
 
 }
+
+
+
+
+#' Find Root Cell
+#'
+#' @param seu seurat
+#' @param gene gene
+#' @param celltype cell type
+#' @param sample sample name
+#'
+#' @export
+#'
+FindRootCell <- function(
+    seu = NULL,
+    gene = 'Pax6',
+    celltype = 'RGC',
+    sample = NULL
+){
+    d <- as.data.frame(seu@assays$SCT@data[gene,])
+    colnames(d) <- gene
+
+    d$cell_type2 <- seu$cell_type2[match(rownames(d), rownames(dev@meta.data))]
+    d$sample <- seu$orig.ident[match(rownames(d), rownames(dev@meta.data))]
+    d2 <- d[order(d[[gene]], decreasing=T),]
+
+    if (length(sample) > 0){
+        rc <- head(rownames(d2[d2$sample=='E12' & d2$cell_type2=='RGC',]), n=1)
+        } else {
+            rc <- head(rownames(d2[d2$cell_type2=='RGC',]), n=1)
+        }
+
+    return(rc)
+}
+
+
+
+
 
 
 

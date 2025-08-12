@@ -6,6 +6,7 @@
 \usage{
 PlotSlingshot(
   sce_slingshot = NULL,
+  reduction = NULL,
   lineage = 1,
   w = 4.5,
   h = 3,
