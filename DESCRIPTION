@@ -12,3 +12,4 @@ Collate:
     'utilities.R'
     'monocle3.R'
     'monocle2.R'
+    'triangleLineage.R'

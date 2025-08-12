@@ -10,7 +10,7 @@
 #'
 RunMonocle2 <- function(
     seu=NULL,
-    root='RGC',
+    root=NULL,
     outdir='.'
 ){
     library(monocle)
@@ -80,10 +80,13 @@ RunMonocle2 <- function(
 
     # set root cell
     #start <- 'CycProg-Like'
-    HSMM2 <- orderCells(HSMM, root_state=GM_state(HSMM, root))
-    saveRDS(HSMM2, file=paste0(outdir, '/monocle2_ordercell.root.rds'))
+    if (length(root) > 0){
+        HSMM <- orderCells(HSMM, root_state=GM_state(HSMM, root))
+        saveRDS(HSMM, file=paste0(outdir, '/monocle2_ordercell.root.rds'))
+    }
+    
 
-    d_cds <- data.frame(cells=HSMM2$cells, pseudotime=HSMM2$Pseudotime, cell_type2=HSMM2$cell_type2)
+    d_cds <- data.frame(cells=HSMM$cells, pseudotime=HSMM$Pseudotime, cell_type2=HSMM$cell_type2)
     write.table(d_cds, paste0(outdir, '/monocle2_ordercell.root.pseudotime.xls'), sep='\t', quote=F, row.names=F)
     
     
@@ -91,7 +94,7 @@ RunMonocle2 <- function(
     library(ggplot2)
     
     # save final plot_cell_trajectory
-    p <- monocle::plot_cell_trajectory(HSMM2, 
+    p <- monocle::plot_cell_trajectory(HSMM, 
                          color_by = "cell_type2",  # seurat_clusters
                          theta = -15,
                          show_branch_points = TRUE,
@@ -106,7 +109,7 @@ RunMonocle2 <- function(
 
 
     # save final plot_cell_trajectory with Pseudotime
-    p <- monocle::plot_cell_trajectory(HSMM2, color_by = "Pseudotime", cell_link_size = 0.2, cell_size = 0.1) +
+    p <- monocle::plot_cell_trajectory(HSMM, color_by = "Pseudotime", cell_link_size = 0.2, cell_size = 0.1) +
         scale_color_viridis_c() + 
         theme(legend.key.height=unit(4, 'mm'))
 
