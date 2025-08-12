@@ -241,10 +241,10 @@ ScatterPlot2D <- function(
 RunTriangleAnalysis <- function(
     seu=NULL, ref = 'human', out_dir = 'out_triangelplot', 
     root='CycProg', armL='Astrocyte', armR='Neuron',
-    min_pct_shared = 0.8, logfc_shared = 0.05,
-    min_pct_armL = 0.5, logfc_armL = 1,
+    expr_ratio = 0.8, min_pct_shared = 0.8, logfc_shared = 0.05,
+    min_pct_armL = 0.5, logfc_armL = 0.5,
     min_pct_armR = 0.5, logfc_armR = 0.5,
-    top_n_genes = 50, expr_ratio = 0.8
+    top_n_genes = 50
 ) {
   
   # Load required libraries
