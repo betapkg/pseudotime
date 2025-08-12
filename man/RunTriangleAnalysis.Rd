@@ -26,6 +26,8 @@ RunTriangleAnalysis(
 
 \item{ref}{human/mouse}
 
+\item{out_dir}{out dir.}
+
 \item{root}{root cell type}
 
 \item{armL}{left arm cell type}
@@ -47,8 +49,6 @@ RunTriangleAnalysis(
 \item{top_n_genes}{cutoff top genes}
 
 \item{expr_ratio}{cutoff ratio of expressed cells}
-
-\item{outdir}{out dir.}
 }
 \value{
 data frame

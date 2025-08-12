@@ -226,7 +226,7 @@ ScatterPlot2D <- function(data=NULL, group='group', color=NULL)
 #' @param logfc_armR logfc cutoff for armR 
 #' @param top_n_genes cutoff top genes 
 #' @param expr_ratio cutoff ratio of expressed cells 
-#' @param outdir out dir.
+#' @param out_dir out dir.
 #'
 #' @return data frame
 #' @export
@@ -327,7 +327,7 @@ RunTriangleAnalysis <- function(
   colnames(df_mean_armR) <- 'avgExp_armR'
   
   # Save gene lists
-  writeLines(shared2, paste0(out_dir, '/shared.gene'))
+  writeLines(shared_genes, paste0(out_dir, '/shared.gene'))
   writeLines(gene_armL, paste0(out_dir, '/', armL, '.gene'))
   writeLines(gene_armR, paste0(out_dir, '/', armR, '.gene'))
   
