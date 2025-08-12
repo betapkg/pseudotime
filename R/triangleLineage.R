@@ -179,14 +179,14 @@ ScatterPlot2D <- function(
 
     #colors <- c("Cycling"="#E64130", "Non-cycling"="#B3B3B3")
 
-    x_min <- min(data$lineage_score)
-    x_max <- max(data$lineage_score)
+    x_min <- min(data[[x]])
+    x_max <- max(data[[x]])
     if (abs(x_min) > abs(x_max)){
         x_max <- abs(x_min)
     }
 
-    y_min <- min(data$progenitor_score)
-    y_max <- max(data$progenitor_score)
+    y_min <- min(data[[y]])
+    y_max <- max(data[[y]])
 
     p <- ggplot(data, aes_string(x=x, y=y, color=group)) + 
             geom_point(shape=16, size=0.4, alpha=0.8) +  
