@@ -165,7 +165,14 @@ Score_UMAPPlot <- function(obj=NULL, umap='umap', name='')
 #' @return plot
 #' @export
 #'
-ScatterPlot2D <- function(data=NULL, group='group', color=NULL)
+ScatterPlot2D <- function(
+    data=NULL, 
+    x='differentiation_score',
+    y='progenitor_score',
+    group='group', 
+    x_lab='Differentiation Score',
+    y_lab='Progenitor Score',
+    color=NULL)
 {
     # lineage_score, progenitor_score, ...
     data <- data[order(data$group, decreasing = TRUE),]
@@ -181,12 +188,12 @@ ScatterPlot2D <- function(data=NULL, group='group', color=NULL)
     y_min <- min(data$progenitor_score)
     y_max <- max(data$progenitor_score)
 
-    p <- ggplot(data, aes_string(x='lineage_score', y='progenitor_score', color=group)) + 
+    p <- ggplot(data, aes_string(x=x, y=y, color=group)) + 
             geom_point(shape=16, size=0.4, alpha=0.8) +  
             theme_bw() + 
             theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
             theme(text=element_text(size=8), plot.title=element_text(size=9, hjust=0.5)) +
-            labs(title='', x="Lineage Score", y="Progenitor Score") +
+            labs(title='', x=x_lab, y=y_lab) +
             xlim(x_min, x_max) +
             theme(legend.position="top", legend.title = element_blank(),
                 legend.text = element_text(), legend.spacing.x = unit(0, 'mm')) +
