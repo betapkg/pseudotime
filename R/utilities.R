@@ -60,8 +60,8 @@ FindRootCell <- function(
     d <- as.data.frame(seu@assays$SCT@data[gene,])
     colnames(d) <- gene
 
-    d$cell_type2 <- seu$cell_type2[match(rownames(d), rownames(dev@meta.data))]
-    d$sample <- seu$orig.ident[match(rownames(d), rownames(dev@meta.data))]
+    d$cell_type2 <- seu$cell_type2[match(rownames(d), rownames(seu@meta.data))]
+    d$sample <- seu$orig.ident[match(rownames(d), rownames(seu@meta.data))]
     d2 <- d[order(d[[gene]], decreasing=T),]
 
     if (length(sample) > 0){
