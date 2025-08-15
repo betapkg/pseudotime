@@ -20,8 +20,11 @@ RunPhate <- function(
 
     DefaultAssay(seu_obj) <- assay
 
+
+    mat <- as.matrix(GetAssayData(seu_obj, slot = "data")[VariableFeatures(seu_obj), ])
+
     # Calculate PHATE
-    oupPhate <- phate(t(GetAssayData(seu_obj)[VariableFeatures(seu_obj), ]), knn=30, npca=50, seed=seed)
+    oupPhate <- phate(t(mat), knn=30, npca=50, seed=seed)
     oupDR = oupPhate$embedding
     oupDR = oupDR / 10^(floor(log10(diff(range(oupDR)))))
     rownames(oupDR) = colnames(seu_obj)
