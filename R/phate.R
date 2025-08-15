@@ -1,7 +1,7 @@
 
 #' RunPhate
 #'
-#' @param seurat_object seurat
+#' @param seu_obj seurat
 #' @param use_py python path
 #' @param assay seurat assay
 #'
@@ -9,7 +9,7 @@
 #' @export
 #'
 RunPhate <- function(
-    seu=NULL,
+    seu_obj=NULL,
     use_py='/Users/hua/opt/miniconda3/envs/phate/bin/python',
     assay='SCT',
     seed=42
@@ -18,21 +18,21 @@ RunPhate <- function(
     use_python(use_py)
     library(phateR)
 
-    DefaultAssay(seurat_object) <- assay
+    DefaultAssay(seu_obj) <- assay
 
     # Calculate PHATE
-    oupPhate <- phate(t(GetAssayData(seurat_object)[VariableFeatures(seurat_object), ]), knn=30, npca=50, seed=seed)
+    oupPhate <- phate(t(GetAssayData(seu_obj)[VariableFeatures(seu_obj), ]), knn=30, npca=50, seed=seed)
     oupDR = oupPhate$embedding
     oupDR = oupDR / 10^(floor(log10(diff(range(oupDR)))))
-    rownames(oupDR) = colnames(seurat_object)
+    rownames(oupDR) = colnames(seu_obj)
     colnames(oupDR) = c("PHATE_1", "PHATE_2")
 
-    seurat_object[["phate"]] <- CreateDimReducObject(embeddings = oupDR, key = "PHATE_", assay = assay)
+    seu_obj[["phate"]] <- CreateDimReducObject(embeddings = oupDR, key = "PHATE_", assay = assay)
 
-    #Idents(seurat_object) <- 'cell_type2'
-    #DimPlot(seurat_object, reduction = "phate", pt.size = 0.1, label = TRUE)
+    #Idents(seu_obj) <- 'cell_type2'
+    #DimPlot(seu_obj, reduction = "phate", pt.size = 0.1, label = TRUE)
 
-    return(seurat_object)
+    return(seu_obj)
 }
 
 
