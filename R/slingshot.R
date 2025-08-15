@@ -26,9 +26,9 @@ RunSlingshotSeurat <- function(
     
     # UMAP or RNA.UMAP
     # set root cluster 
-    sce_slingshot <- slingshot(sce, reducedDim=reduction, start.clus=start_root, clusterLabels=ident, allow.breaks = allow_breaks)
+    sce_slingshot <- slingshot(data=sce, reducedDim=reduction, start.clus=start_root, clusterLabels=ident, allow.breaks = allow_breaks)
 
-    summary_lineages <- slingshot::SlingshotDataSet(sce_slingshot)
+    summary_lineages <- SlingshotDataSet(sce_slingshot)
     print(summary_lineages@lineages)
 
 
@@ -46,7 +46,7 @@ RunSlingshotSeurat <- function(
         saveRDS(sce_slingshot, paste0(outdir, '/1.slingshot.rds'))
 
         # save pesudotime
-        pseudotimeED <- slingshot::slingPseudotime(sce_slingshot, na=FALSE)
+        pseudotimeED <- slingPseudotime(sce_slingshot, na=FALSE)
         write.table(pseudotimeED, paste0(outdir, '/2.slingshot.pseudotime.xls'), sep='\t', quote=F, col.names=NA)
 
         # plot
@@ -86,8 +86,8 @@ PlotSlingshot <- function(
     plotcol <- colors[cut(sce_slingshot[[lineage_name]], breaks=100)]
 
     pdf(paste0(outdir, '/', lineage_name, '.pdf'), width=w, height=h, useDingbats=FALSE)
-    plot(slingshot::reducedDims(sce_slingshot)[[reduction]], col=plotcol, pch=16, asp=0.5)
-    lines(slingshot::SlingshotDataSet(sce_slingshot), lwd=1, col='black')
+    plot(reducedDims(sce_slingshot)[[reduction]], col=plotcol, pch=16, asp=0.5)
+    lines(SlingshotDataSet(sce_slingshot), lwd=1, col='black')
     dev.off()
 }
 
