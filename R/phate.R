@@ -1,7 +1,7 @@
 
 #' RunPhate
 #'
-#' @param seu seurat
+#' @param seurat_object seurat
 #' @param use_py python path
 #' @param assay seurat assay
 #'
@@ -18,19 +18,21 @@ RunPhate <- function(
     use_python(use_py)
     library(phateR)
 
+    DefaultAssay(seurat_object) <- assay
+
     # Calculate PHATE
-    oupPhate <- phate(t(GetAssayData(seu)[VariableFeatures(seu), ]), knn=30, npca=50, seed=seed)
+    oupPhate <- phate(t(GetAssayData(seurat_object)[VariableFeatures(seurat_object), ]), knn=30, npca=50, seed=seed)
     oupDR = oupPhate$embedding
     oupDR = oupDR / 10^(floor(log10(diff(range(oupDR)))))
-    rownames(oupDR) = colnames(seu)
+    rownames(oupDR) = colnames(seurat_object)
     colnames(oupDR) = c("PHATE_1", "PHATE_2")
 
-    seu[["phate"]] <- CreateDimReducObject(embeddings = oupDR, key = "PHATE_", assay = assay)
+    seurat_object[["phate"]] <- CreateDimReducObject(embeddings = oupDR, key = "PHATE_", assay = assay)
 
-    #Idents(seu) <- 'cell_type2'
-    #DimPlot(seu, reduction = "phate", pt.size = 0.1, label = TRUE)
+    #Idents(seurat_object) <- 'cell_type2'
+    #DimPlot(seurat_object, reduction = "phate", pt.size = 0.1, label = TRUE)
 
-    return(seu)
+    return(seurat_object)
 }
 
 
