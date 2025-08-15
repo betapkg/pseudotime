@@ -192,7 +192,7 @@ ScatterPlot2D <- function(
             geom_point(shape=16, size=0.4, alpha=0.8) +  
             theme_bw() + 
             theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-            theme(text=element_text(size=8), plot.title=element_text(size=9, hjust=0.5)) +
+            theme(text=element_text(size=8, face='bold', color='black'), plot.title=element_text(size=9, hjust=0.5)) +
             labs(title='', x=x_lab, y=y_lab) +
             xlim(x_min, x_max) +
             theme(legend.position="top", legend.title = element_blank(),

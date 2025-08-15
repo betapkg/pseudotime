@@ -13,3 +13,5 @@ Collate:
     'monocle3.R'
     'monocle2.R'
     'triangleLineage.R'
+    'urd.R'
+    'phate.R'
