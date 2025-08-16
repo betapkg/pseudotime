@@ -18,7 +18,8 @@ RunURD <- function(
 
     # 2.RNA count
     metadata <- seu@meta.data
-    matrix_count <- seu@assays$RNA@counts  # must use $RNA@counts rather than $SCT@counts
+    # Seurat 5
+    matrix_count <- seu[["RNA"]]$counts  # must use $RNA@counts rather than $SCT@counts
 
     # 3.Create URD object
     axial <- createURD(count.data = matrix_count, meta = metadata, min.cells=3, min.counts=3)
