@@ -12,7 +12,8 @@
 RunURD <- function(
     seu=NULL,
     cluster='cell_type2',
-    root='RGC'
+    root='RGC',
+    seed=42
 ) {
 
     # 2.RNA count
@@ -34,7 +35,7 @@ RunURD <- function(
     pcSDPlot(axial)
 
     # 6.Calculate tSNE
-    set.seed(19)
+    set.seed(seed)
     axial <- calcTsne(object = axial)
 
 
